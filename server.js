@@ -41,8 +41,18 @@ app.post('/products', (req,res) => {
     })
 })
 
-app.put('/products', (req, res) => {
-    res.send("Actualizado el producto.");
+app.put('/products/:id', (req, res) => {
+    const newdata = req.body;
+    const Product_validation = products.find((products) => products.id === parseInt(req.params.id))
+    if (!Product_validation) return res.status(404).json({
+        Message: "No encontro el producto",
+    });
+
+    products = products.map((p) => p.id === parseInt(req.params.id) ? {...p, ...newdata} : p);
+
+    res.json({
+        Message: "Product updated Successfully.",
+    });
 })
 
 app.delete('/products/:id', (req, res) => {
